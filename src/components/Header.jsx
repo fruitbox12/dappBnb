@@ -5,7 +5,7 @@ import { Magic } from 'magic-sdk'
 
 const Header = () => {
   const [connectedAccount, setConnectedAccount] = useGlobalState('connectedAccount')
-  const magic = new Magic('YOUR_PUBLISHABLE_API_KEY')
+  const magic = new Magic('pk_live_47057EC7DC7D2202')
 
   const handleLogout = async () => {
     await magic.user.logout()
