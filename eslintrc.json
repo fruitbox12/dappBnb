@@ -1,0 +1,10 @@
+{
+  "rules": {},
+  "extends": [],
+  "overrides": [
+    {
+      "files": ["**/*.js", "**/*.jsx"],
+      "rules": {}
+    }
+  ]
+}
