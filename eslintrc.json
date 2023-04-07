@@ -1,10 +1,13 @@
 {
   "rules": {},
   "extends": [],
-  "overrides": [
+   "overrides": [
     {
       "files": ["**/*.js", "**/*.jsx"],
-      "rules": {}
+      "rules": {
+        "react/display-name": "off",
+        "no-console": "off"
+      }
     }
   ]
 }
