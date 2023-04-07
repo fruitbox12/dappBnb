@@ -34,6 +34,7 @@ const Header = () => {
       )}
     </header>
   )
+}
 const ButtonGroup = () => {
   const [currentUser] = useGlobalState('currentUser')
   const navigate = useNavigate()
