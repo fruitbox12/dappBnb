@@ -1,10 +1,16 @@
 import { FaAirbnb, FaSearch } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
-import { connectWallet } from '../Blockchain.services'
 import { setGlobalState, truncate, useGlobalState } from '../store'
+import { Magic } from 'magic-sdk'
 
 const Header = () => {
-  const [connectedAccount] = useGlobalState('connectedAccount')
+  const [connectedAccount, setConnectedAccount] = useGlobalState('connectedAccount')
+  const magic = new Magic('YOUR_PUBLISHABLE_API_KEY')
+
+  const handleLogout = async () => {
+    await magic.user.logout()
+    setConnectedAccount(null)
+  }
 
   return (
     <header className="flex justify-between items-center p-4 px-8 sm:px-10 md:px-14 border-b-2 border-b-slate-200 w-full">
@@ -15,24 +21,19 @@ const Header = () => {
         </p>
       </Link>
 
-      <ButtonGroup />
+      <ButtonGroup handleLogout={handleLogout} />
 
       {connectedAccount ? (
-        <button className="p-2 bg-[#ff385c] text-white rounded-full text-sm">
-          {truncate(connectedAccount, 4, 4, 11)}
+        <button onClick={handleLogout} className="p-2 bg-[#ff385c] text-white rounded-full text-sm">
+          {truncate(connectedAccount, 4, 4, 11)} (Logout)
         </button>
       ) : (
-        <button
-          onClick={connectWallet}
-          className="p-2 bg-[#ff385c] text-white rounded-full text-sm"
-        >
-          Connect wallet
+        <button onClick={() => magic.auth.loginWithMagicLink()} className="p-2 bg-[#ff385c] text-white rounded-full text-sm">
+          Login with Magic
         </button>
       )}
     </header>
   )
-}
-
 const ButtonGroup = () => {
   const [currentUser] = useGlobalState('currentUser')
   const navigate = useNavigate()
