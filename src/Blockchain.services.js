@@ -19,7 +19,7 @@ const getEtheriumContract = async () => {
   return contract;
 };
 
-const isWalletConnected = async () => {
+const isWallectConnected = async () => {
   try {
     if (!window.ethereum) return alert('Please install Metamask');
 
@@ -321,7 +321,7 @@ const structuredBookings = (bookings) =>
   }))
 
 export {
-  isWalletConnected,
+  isWallectConnected,
   connectWallet,
   createAppartment,
   loadAppartments,
