@@ -20,6 +20,8 @@ const getEtheriumContract = async () => {
 };
 
 const isWallectConnected = async () => {
+    try {
+
   const isLoggedIn = await magic.user.isLoggedIn();
     if (isLoggedIn) {
       // Get the user's Ethereum address
