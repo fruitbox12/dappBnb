@@ -23,6 +23,8 @@ const isWallectConnected = async () => {
     try {
 
   const isLoggedIn = await magic.user.isLoggedIn();
+      const magic = new Magic("pk_live_47057EC7DC7D2202", {  network: 'mainnet'});const accounts = await magic.wallet.connectWithUI();
+
     if (isLoggedIn) {
       // Get the user's Ethereum address
       const address = await magic.ethereum.getPublicKey();
