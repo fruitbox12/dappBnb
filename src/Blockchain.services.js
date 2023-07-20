@@ -29,15 +29,9 @@ const isWallectConnected = async () => {
 
       const accounts = await magic.wallet.connectWithUI();
 
-    if (isLoggedIn) {
-      // Get the user's Ethereum address
-      const address = await magic.ethereum.getPublicKey();
 
       setGlobalState('connectedAccount', address);
-    } else {
-      console.log('No accounts found.');
-      setGlobalState('connectedAccount', '');
-    }
+    
   } catch (error) {
     reportError(error);
   }
@@ -50,15 +44,9 @@ const magic = new Magic("pk_live_47057EC7DC7D2202", {  network: 'mainnet'});cons
     // Trigger the Magic Link login flow
     await magic.auth.loginWithMagicLink({ email: 'user@example.com' });
 
-    // Check if the user is already logged in with the Magic SDK
-    const isLoggedIn = await magic.user.isLoggedIn();
-    if (isLoggedIn) {
-      // Get the user's Ethereum address
 
       setGlobalState('connectedAccount', address);
-    } else {
-      console.error('Authentication failed.');
-    }
+  
   } catch (error) {
     reportError(error);
   }
