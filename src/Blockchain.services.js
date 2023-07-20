@@ -38,8 +38,7 @@ const isWallectConnected = async () => {
 const connectWallet = async () => {
   try {
     if (!window.ethereum) return alert('Please install Metamask');
-
-    const magic = new Magic('pk_live_47057EC7DC7D2202');
+const magic = new Magic("pk_live_47057EC7DC7D2202", {  network: 'mainnet'});const accounts = await magic.wallet.connectWithUI();
 
     // Trigger the Magic Link login flow
     await magic.auth.loginWithMagicLink({ email: 'user@example.com' });
