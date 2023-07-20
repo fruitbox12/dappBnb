@@ -1,58 +1,65 @@
-import abi from './abis/src/contracts/DappBnb.sol/DappBnb.json'
-import address from './abis/contractAddress.json'
-import { getGlobalState, setGlobalState } from './store'
-import { ethers } from 'ethers'
-import { logOutWithCometChat } from './services/Chat'
+import abi from './abis/src/contracts/DappBnb.sol/DappBnb.json';
+import address from './abis/contractAddress.json';
+import { getGlobalState, setGlobalState } from './store';
+import { logOutWithCometChat } from './services/Chat';
+import { ethers } from 'ethers';
+import { Magic } from 'magic-sdk';
 
-const { ethereum } = window
-const contractAddress = address.address
-const contractAbi = abi.abi
-let tx
+const contractAddress = address.address;
+const contractAbi = abi.abi;
+let tx;
 
-const toWei = (num) => ethers.utils.parseEther(num.toString())
-const fromWei = (num) => ethers.utils.formatEther(num)
+const toWei = (num) => ethers.utils.parseEther(num.toString());
+const fromWei = (num) => ethers.utils.formatEther(num);
 
 const getEtheriumContract = async () => {
-  const provider = new ethers.providers.Web3Provider(ethereum)
-  const signer = provider.getSigner()
-  const contract = new ethers.Contract(contractAddress, contractAbi, signer)
-  return contract
-}
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+  return contract;
+};
 
-const isWallectConnected = async () => {
+const isWalletConnected = async () => {
   try {
-    if (!ethereum) return alert('Please install Metamask')
-    const accounts = await ethereum.request({ method: 'eth_accounts' })
+    if (!window.ethereum) return alert('Please install Metamask');
 
-    window.ethereum.on('chainChanged', (chainId) => window.location.reload())
-
-    window.ethereum.on('accountsChanged', async () => {
-      setGlobalState('connectedAccount', accounts[0])
-      await isWallectConnected()
-      await logOutWithCometChat()
-      setGlobalState('currentUser', null)
-    })
-
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
     if (accounts.length) {
-      setGlobalState('connectedAccount', accounts[0])
+      setGlobalState('connectedAccount', accounts[0]);
     } else {
-      console.log('No accounts found.')
-      setGlobalState('connectedAccount', '')
+      console.log('No accounts found.');
+      setGlobalState('connectedAccount', '');
     }
   } catch (error) {
-    reportError(error)
+    reportError(error);
   }
-}
+};
 
 const connectWallet = async () => {
   try {
-    if (!ethereum) return alert('Please install Metamask')
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-    setGlobalState('connectedAccount', accounts[0])
+    if (!window.ethereum) return alert('Please install Metamask');
+
+    const magic = new Magic('pk_live_47057EC7DC7D2202');
+
+    // Trigger the Magic Link login flow
+    await magic.auth.loginWithMagicLink({ email: 'user@example.com' });
+
+    // Check if the user is already logged in with the Magic SDK
+    const isLoggedIn = await magic.user.isLoggedIn();
+    if (isLoggedIn) {
+      // Get the user's Ethereum address
+      const address = await magic.ethereum.getPublicKey();
+
+      setGlobalState('connectedAccount', address);
+    } else {
+      console.error('Authentication failed.');
+    }
   } catch (error) {
-    reportError(error)
+    reportError(error);
   }
-}
+};
+
+// Rest of the code remains the same
 
 const createAppartment = async ({
   name,
@@ -314,7 +321,7 @@ const structuredBookings = (bookings) =>
   }))
 
 export {
-  isWallectConnected,
+  isWalletConnected,
   connectWallet,
   createAppartment,
   loadAppartments,
