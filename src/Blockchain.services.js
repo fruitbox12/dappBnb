@@ -20,12 +20,12 @@ const getEtheriumContract = async () => {
 };
 
 const isWallectConnected = async () => {
-  try {
-    if (!window.ethereum) return alert('Please install Metamask');
+  const isLoggedIn = await magic.user.isLoggedIn();
+    if (isLoggedIn) {
+      // Get the user's Ethereum address
+      const address = await magic.ethereum.getPublicKey();
 
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
-    if (accounts.length) {
-      setGlobalState('connectedAccount', accounts[0]);
+      setGlobalState('connectedAccount', address);
     } else {
       console.log('No accounts found.');
       setGlobalState('connectedAccount', '');
