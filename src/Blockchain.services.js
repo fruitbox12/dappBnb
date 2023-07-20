@@ -4,6 +4,7 @@ import { getGlobalState, setGlobalState } from './store';
 import { logOutWithCometChat } from './services/Chat';
 import { ethers } from 'ethers';
 import { Magic } from 'magic-sdk';
+import { Web3 } from 'web3';
 
 const contractAddress = address.address;
 const contractAbi = abi.abi;
@@ -23,7 +24,10 @@ const isWallectConnected = async () => {
     try {
 
   const isLoggedIn = await magic.user.isLoggedIn();
-      const magic = new Magic("pk_live_47057EC7DC7D2202", {  network: 'mainnet'});const accounts = await magic.wallet.connectWithUI();
+      const magic = new Magic("pk_live_47057EC7DC7D2202", {  network: 'mainnet'});
+      const web3 = new Web3(magicProvider);
+
+      const accounts = await magic.wallet.connectWithUI();
 
     if (isLoggedIn) {
       // Get the user's Ethereum address
